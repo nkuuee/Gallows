@@ -45,6 +45,7 @@ public class GameSession {
 
             if (String.valueOf(current).equals(secretWord)) {
                 System.out.println("Поздравляю, ты победил! Загаданное слово: " + secretWord);
+                break;
             }
         }
 
