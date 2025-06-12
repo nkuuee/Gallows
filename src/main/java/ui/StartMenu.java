@@ -1,7 +1,6 @@
-package startmenu;
+package ui;
 
 import game.GameSession;
-import game.GameState;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
