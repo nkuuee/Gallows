@@ -1,59 +1,58 @@
 package game;
 
-import java.util.Scanner;
+import java.util.HashSet;
+import java.util.Set;
 
 public class GameSession {
+    private final WordGenerator wordGenerator;
+    private final UserInput userInput;
+    private final GameStatus gameStatus;
+    private final HangmanDrawer hangmanDrawer;
+
+    private Set<Character> guessedLetters;
+
+    public GameSession() {
+        this.wordGenerator = new WordGenerator();
+        this.userInput = new UserInput();
+        this.gameStatus = new GameStatus();
+        this.hangmanDrawer = new HangmanDrawer();
+        this.guessedLetters = new HashSet<>();
+    }
 
     public void start() {
-        WordGenerator generator = new WordGenerator();
-        String secretWord = generator.generateWord();
-        Scanner sc = new Scanner(System.in);
+        String secretWord = wordGenerator.generateWord();
+        GameState gameState = new GameState(secretWord);
 
-        char[] letters = secretWord.toCharArray();
-        char[] current = new char[letters.length];
+        while (true) {
+            hangmanDrawer.draw(gameStatus.getCurrentMistakes());
+            System.out.println("Текущее слово: " + gameState.getCurrentState());
+            System.out.println("Угаданные буквы: " + guessedLetters);
+            System.out.println("Ошибки: " + gameStatus.getCurrentMistakes() + "/" + GameStatus.MAX_MISTAKES);
 
-        for (int i = 0; i < current.length; i++) {
-            current[i] = '_';
-        }
+            char guess = userInput.enterLetter();
 
-        int mistake = 0;
-        int mistakeMax = 10;
-
-        while (mistake < mistakeMax) {
-            System.out.println("Текущее состояние: " + String.valueOf(current));
-            System.out.println("Количество ошибок: " + mistake);
-            System.out.print("Введите букву: ");
-
-            String enterLetter = sc.next();
-            if (enterLetter.length() != 1) {
-                System.out.println("Введите одну букву!");
+            if (guessedLetters.contains(guess)) {
+                System.out.println("Эта буква уже вводилась.");
+                continue;
             }
 
-            char checked = enterLetter.charAt(0);
-            boolean correct = false;
+            guessedLetters.add(guess);
 
-            for (int i = 0; i < letters.length; i++) {
-                if (letters[i] == checked) {
-                    current[i] = checked;
-                    correct = true;
-                }
+            if (!gameState.updateState(guess)) {
+                gameStatus.incrementMistakes();
             }
 
-            if (!correct) {
-                mistake++;
+            if (gameState.isWin()) {
+                hangmanDrawer.draw(gameStatus.getCurrentMistakes());
+                System.out.println("Вы выиграли! Слово: " + secretWord);
+                break;
             }
 
-            if (String.valueOf(current).equals(secretWord)) {
-                System.out.println("Поздравляю, ты победил! Загаданное слово: " + secretWord);
+            if (gameStatus.isGameOver()) {
+                hangmanDrawer.draw(gameStatus.getCurrentMistakes());
+                System.out.println("Вы проиграли! Загаданное слово: " + secretWord);
                 break;
             }
         }
-
-        if (!String.valueOf(current).equals(secretWord)) {
-            System.out.println("Ты проиграл... В следующий раз, тебе точно повезет! Загаданное слово: "
-                    + secretWord);
-        }
-
-
     }
 }
