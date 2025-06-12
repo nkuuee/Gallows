@@ -1,30 +1,46 @@
 package game;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class WordGenerator {
-    public String generateWord() {
-        List<String> words = new ArrayList<>();
+    private static final List<String> WORDS = new ArrayList<>();
 
-        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\nkuue\\OneDrive\\Документы\\russian_nouns_1000.txt"))) {
-            String line;
+    static {
+        try (InputStream inputStream = WordGenerator.class
+                .getClassLoader()
+                .getResourceAsStream("russian_nouns_1000.txt")) {
 
-            while ((line = reader.readLine()) != null) {
-                words.add(line.trim());
+            if (inputStream == null) {
+                throw new IllegalStateException("Файл russian_nouns_1000.txt не найден в ресурсах.");
+            }
+
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    WORDS.add(line.trim());
+                }
+            }
+
+            if (WORDS.isEmpty()) {
+                throw new IllegalStateException("Файл пуст. Нет слов для игры.");
             }
 
         } catch (IOException e) {
-            System.out.println("Ошибка при чтении файла: " + e.getMessage());
+            throw new RuntimeException("Ошибка при загрузке слов: " + e.getMessage(), e);
         }
+    }
 
-        if (words.isEmpty()) {
-            throw new IllegalStateException("Словарь пуст или несуществует.");
-        }
-        return words.get(new Random().nextInt(words.size()));
+    private final Random random = new Random();
+
+    public String generateWord() {
+        return WORDS.get(random.nextInt(WORDS.size()));
     }
 }
+
+
