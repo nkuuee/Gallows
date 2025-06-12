@@ -1,7 +1,7 @@
 package game;
 
 public class GameStatus {
-    private static final int MAX_MISTAKES = 7;
+    public static final int MAX_MISTAKES = 7;
     private int currentMistakes = 0;
 
     public void incrementMistakes() {
