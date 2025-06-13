@@ -1,7 +1,7 @@
 # 🎮 <span style="color:#FF6B6B">Gallows Game</span> <img src="https://img.shields.io/badge/Java-17%2B-orange?logo=openjdk" alt="Java 17+"> <img src="https://img.shields.io/badge/License-MIT-green" alt="MIT License">
 
 <div align="center">
-  <img src="https://media.giphy.com/media/xT5LMHxhOfscxPfIfm/giphy.gif" width="200" alt="Hangman GIF">
+  <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcDFtZ3VjNG5xYzNkY2V5YnR6YzF5dWJjZ3B6eWJ0dWZqY2N6eGZ0ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xT5LMHxhOfscxPfIfm/giphy.gif" width="250" alt="Анимация виселицы">
 </div>
 
 🔴 **Игра «Виселица»** с консольным интерфейсом на Java. Угадайте слово до того, как человечек будет повешен!
